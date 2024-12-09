@@ -222,7 +222,7 @@ public class mainFrame extends JFrame {
 		nPanel.add(todoLabel);
 
 		// ToDoList 추가 버튼
-		JButton todoAddButton = new JButton("+");
+		JButton todoAddButton = new JButton("추가");
 		todoAddButton.setSize(40, 25);
 		todoAddButton.setLocation(110, 703);
 		nPanel.add(todoAddButton);

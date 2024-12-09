@@ -2,6 +2,7 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import javax.swing.*;
 
 public class loginFrame extends JFrame {
@@ -53,7 +54,11 @@ public class loginFrame extends JFrame {
 				// 로그인 버튼 클릭 시 user.json에서 아이디와 비밀번호 확인
 				JSONParser parser = new JSONParser();
 				try {
-					Reader reader = new FileReader("./src/user/user.json");
+					InputStream inputStream = getClass().getClassLoader().getResourceAsStream("user.json");
+					if (inputStream == null) {
+						throw new FileNotFoundException("Resource not found: user.json");
+					}
+					Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 					JSONObject jsonObject = (JSONObject) parser.parse(reader);
 					id = tf1.getText();
 					JSONObject user = (JSONObject) jsonObject.get(tf1.getText());

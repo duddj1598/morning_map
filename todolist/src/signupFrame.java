@@ -1,5 +1,7 @@
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.*;
+import java.nio.file.StandardCopyOption;
 import javax.swing.*;
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -53,7 +55,7 @@ public class signupFrame extends JFrame{
 
 		signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-				//가입하기 버튼 클릭시 ./user/user.json에 있는 회원정보 추가 저장
+				//가입하기 버튼 클릭시 user.json에 있는 회원정보 추가 저장
 				JSONObject user = new JSONObject();
 				user.put("id", tf1.getText());
 				user.put("password", tf2.getText());
@@ -61,16 +63,35 @@ public class signupFrame extends JFrame{
 				user.put("todolist", todolist);
 				JSONParser parser = new JSONParser();
 				try {
-					Reader reader = new FileReader("./src/user/user.json");
+					// JAR 내부의 리소스 읽기
+					InputStream inputStream = getClass().getClassLoader().getResourceAsStream("user.json");
+					if (inputStream == null) {
+						throw new FileNotFoundException("Resource not found: user.json");
+					}
+
+					// 외부 경로로 복사 (프로그램 실행 디렉토리)
+					File externalFile = new File("user.json");
+					if (!externalFile.exists()) {
+						Files.copy(inputStream, externalFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+					}
+
+					// JSON 파일 읽기
+					Reader reader = new FileReader(externalFile);
 					JSONObject jsonObject = (JSONObject) parser.parse(reader);
+					reader.close();
+
+					// JSON 데이터 수정
 					jsonObject.put(tf1.getText(), user);
-					FileWriter file = new FileWriter("./src/user/user.json");
-					file.write(jsonObject.toJSONString());
-					file.flush();
-					file.close();
+
+					// 수정된 JSON 파일 쓰기
+					FileWriter fileWriter = new FileWriter(externalFile);
+					fileWriter.write(jsonObject.toJSONString());
+					fileWriter.flush();
+					fileWriter.close();
 				} catch (IOException | ParseException e1) {
 					e1.printStackTrace();
 				}
+
 				//로그인 화면으로 복귀
 				lf.setVisible(true);
 				setVisible(false);

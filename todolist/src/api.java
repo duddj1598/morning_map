@@ -35,7 +35,14 @@ public class api {
     private String [] weatherimg = new String[7];
     String get_date(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        date = Time.get_today().format(formatter);
+        DateTimeFormatter houris = DateTimeFormatter.ofPattern("HH");
+        String hour = Time.get_time().format(houris);
+        if(Integer.parseInt(hour)<5){
+            date = Time.get_today().minusDays(1).format(formatter);
+        }
+        else {
+            date = Time.get_today().format(formatter);
+        }
         return date;
     }
     public String [] get_weather(){

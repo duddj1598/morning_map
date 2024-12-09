@@ -1,0 +1,11 @@
+{
+  "junho": {
+    "id": "junho",
+    "password": "1234",
+    "todolist": [
+      {"title": "객체지향언어 공부하기", "date": "2021-07-01", "done": false},
+      {"title": "React 공부하기", "date": "2021-07-02", "done": false},
+      {"title": "Node.js 공부하기", "date": "2021-07-03", "done": false}
+    ]
+  }
+}
